@@ -1,0 +1,67 @@
+# Claude Code ignore file for WordPress plugins
+# Excludes files and directories from Claude's context to improve token efficiency
+# Reference: https://code.claude.com/docs/context
+
+# Composer dependencies
+vendor/
+composer.lock
+
+# Node dependencies and build artifacts
+node_modules/
+dist/
+build/
+.webpack/
+*.min.js
+*.min.css
+
+# WordPress core and content (usually not owned by this plugin)
+wp-content/plugins/*/
+wp-content/themes/*/
+wp-includes/
+wp-admin/
+wp-*.php
+index.php
+license.txt
+readme.html
+
+# Database and environment
+*.sql
+*.sqlite
+.env
+.env.local
+.env.*.local
+
+# IDE and system files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Testing and coverage
+coverage/
+.coverage
+.phpunit.result.cache
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+.tmp/
+.cache/
+temp/
+
+# Build artifacts
+dist/
+build/
+release/
+
+# Git and version control
+.git/
+.github/actions/  # Often large third-party actions
+
+# Package manager locks (optional, if you prefer to index these)
+# package-lock.json
+# yarn.lock

@@ -1,0 +1,48 @@
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run Claude Code Review
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # Get changed files
+          FILES=$(gh pr diff ${{ github.event.pull_request.number }} --name-only)
+
+          # Run review with budget cap
+          claude -p "Review these changed files for security, code quality, and best practices. Be concise — only report issues, not praise. Group by severity (Critical/High/Medium/Low). Files changed:\n$FILES" \
+            --model haiku \
+            --max-budget-usd 1.00 \
+            --output-format text > /tmp/review.md 2>&1 || true
+
+          # Post as PR comment
+          if [ -s /tmp/review.md ]; then
+            gh pr comment ${{ github.event.pull_request.number }} \
+              --body "## Claude Code Review
+
+          $(cat /tmp/review.md)
+
+          ---
+          *Automated review by Claude Code (haiku, \$1.00 budget cap)*"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

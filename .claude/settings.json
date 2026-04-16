@@ -1,0 +1,21 @@
+{
+  "autoCompactThreshold": 50,
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git branch:*)",
+      "Bash(git show:*)",
+      "Bash(cat * | jq .)",
+      "Bash(jq:*)",
+      "Bash(ls:*)",
+      "Bash(wc:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git reset --hard:*)"
+    ]
+  }
+}

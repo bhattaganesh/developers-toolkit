@@ -1,0 +1,481 @@
+rules:
+  # ========================================
+  # CSRF - Missing Nonce Verification
+  # ========================================
+
+  - id: wordpress-csrf-missing-nonce
+    patterns:
+      - pattern-either:
+          - pattern: |
+              function $FUNC(...) {
+                ...
+                $_POST[...]
+                ...
+              }
+          - pattern: |
+              function $FUNC(...) {
+                ...
+                $_GET[...]
+                ...
+              }
+      - pattern-not-inside: |
+          check_nonce(...)
+      - pattern-not-inside: |
+          wp_verify_nonce(...)
+      - pattern-not-inside: |
+          check_ajax_referer(...)
+    message: "State-changing function accessing user input without nonce verification (CSRF vulnerability)"
+    languages: [php]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-352
+      owasp: A01:2021 - Broken Access Control
+      confidence: MEDIUM
+
+  # ========================================
+  # SQL Injection - Unprepared Queries
+  # ========================================
+
+  - id: wordpress-sql-injection-wpdb
+    patterns:
+      - pattern-either:
+          - pattern: $wpdb->query("..." . $VAR . "...")
+          - pattern: $wpdb->get_results("..." . $VAR . "...")
+          - pattern: $wpdb->get_row("..." . $VAR . "...")
+          - pattern: $wpdb->get_col("..." . $VAR . "...")
+          - pattern: $wpdb->get_var("..." . $VAR . "...")
+      - pattern-not: $wpdb->query($wpdb->prepare(...))
+      - metavariable-pattern:
+          metavariable: $VAR
+          patterns:
+            - pattern-either:
+                - pattern: $_POST[...]
+                - pattern: $_GET[...]
+                - pattern: $_REQUEST[...]
+                - pattern: $_COOKIE[...]
+    message: "SQL injection: User input concatenated in database query without prepare()"
+    languages: [php]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-89
+      owasp: A03:2021 - Injection
+      confidence: HIGH
+
+  - id: wordpress-sql-injection-order-by
+    pattern: |
+      $wpdb->$METHOD("... ORDER BY $VAR ...")
+    message: "SQL injection in ORDER BY clause - user input in dynamic ORDER BY"
+    languages: [php]
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: CWE-89
+      confidence: MEDIUM
+
+  # ========================================
+  # XSS - Unescaped Output
+  # ========================================
+
+  - id: wordpress-xss-echo-unescaped
+    patterns:
+      - pattern-either:
+          - pattern: echo $VAR;
+          - pattern: print $VAR;
+      - pattern-not: echo esc_html(...);
+      - pattern-not: echo esc_attr(...);
+      - pattern-not: echo esc_url(...);
+      - pattern-not: echo esc_js(...);
+      - pattern-not: echo wp_kses(...);
+      - pattern-not: echo wp_kses_post(...);
+      - metavariable-pattern:
+          metavariable: $VAR
+          patterns:
+            - pattern-either:
+                - pattern: $_POST[...]
+                - pattern: $_GET[...]
+                - pattern: $_REQUEST[...]
+                - pattern: $...[...]
+    message: "Potential XSS: Variable output without escaping"
+    languages: [php]
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: CWE-79
+      owasp: A03:2021 - Injection
+      confidence: MEDIUM
+
+  # ========================================
+  # REST API - Missing Permission Callback
+  # ========================================
+
+  - id: wordpress-rest-api-no-permission
+    patterns:
+      - pattern: |
+          register_rest_route($NAMESPACE, $ROUTE, [...])
+      - pattern-not: |
+          register_rest_route($NAMESPACE, $ROUTE, [..., 'permission_callback' => ..., ...])
+    message: "REST API route without permission_callback - unauthorized access vulnerability"
+    languages: [php]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-284
+      confidence: HIGH
+
+  - id: wordpress-rest-api-return-true
+    pattern: |
+      register_rest_route($NAMESPACE, $ROUTE, [..., 'permission_callback' => '__return_true', ...])
+    message: "REST API route with __return_true permission - allows unauthenticated access"
+    languages: [php]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-284
+      confidence: HIGH
+
+  # ========================================
+  # File Upload - Insufficient Validation
+  # ========================================
+
+  - id: wordpress-file-upload-no-validation
+    patterns:
+      - pattern-either:
+          - pattern: move_uploaded_file($_FILES[...], ...)
+          - pattern: wp_upload_bits($FILENAME, null, $CONTENT)
+      - pattern-not-inside: |
+          if (...) {
+            ...
+            $ALLOWED = [...];
+            ...
+          }
+    message: "File upload without proper type/extension validation"
+    languages: [php]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-434
+      confidence: MEDIUM
+
+  # ========================================
+  # SSRF - Unvalidated Remote Requests
+  # ========================================
+
+  - id: wordpress-ssrf-wp-remote
+    patterns:
+      - pattern-either:
+          - pattern: wp_remote_get($URL, ...)
+          - pattern: wp_remote_post($URL, ...)
+          - pattern: wp_remote_request($URL, ...)
+      - metavariable-pattern:
+          metavariable: $URL
+          patterns:
+            - pattern-either:
+                - pattern: $_POST[...]
+                - pattern: $_GET[...]
+                - pattern: $_REQUEST[...]
+    message: "SSRF vulnerability: User-controlled URL in remote request"
+    languages: [php]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-918
+      confidence: HIGH
+
+  # ========================================
+  # Deserialization - Unsafe Unserialize
+  # ========================================
+
+  - id: wordpress-unsafe-unserialize
+    patterns:
+      - pattern: unserialize($DATA)
+      - metavariable-pattern:
+          metavariable: $DATA
+          patterns:
+            - pattern-either:
+                - pattern: $_POST[...]
+                - pattern: $_GET[...]
+                - pattern: $_COOKIE[...]
+                - pattern: $_REQUEST[...]
+    message: "Object injection: unserialize() with user input enables RCE"
+    languages: [php]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-502
+      confidence: HIGH
+
+  # ========================================
+  # Options Injection - Dynamic Option Names
+  # ========================================
+
+  - id: wordpress-options-injection
+    patterns:
+      - pattern-either:
+          - pattern: update_option($OPTION_NAME, ...)
+          - pattern: add_option($OPTION_NAME, ...)
+      - metavariable-pattern:
+          metavariable: $OPTION_NAME
+          patterns:
+            - pattern-either:
+                - pattern: $_POST[...]
+                - pattern: $_GET[...]
+    message: "Options table injection: User controls option name, can modify any WordPress setting"
+    languages: [php]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-915
+      confidence: HIGH
+
+  # ========================================
+  # Path Traversal - File Operations
+  # ========================================
+
+  - id: wordpress-path-traversal
+    patterns:
+      - pattern-either:
+          - pattern: file_get_contents($PATH)
+          - pattern: file_put_contents($PATH, ...)
+          - pattern: include($PATH)
+          - pattern: require($PATH)
+      - metavariable-pattern:
+          metavariable: $PATH
+          patterns:
+            - pattern-either:
+                - pattern: $_POST[...]
+                - pattern: $_GET[...]
+      - pattern-not-inside: |
+          if (validate_file($PATH) === 0) {
+            ...
+          }
+    message: "Path traversal: User input in file path without validation"
+    languages: [php]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-22
+      confidence: MEDIUM
+
+  # ========================================
+  # IDOR - Missing Ownership Check
+  # ========================================
+
+  - id: wordpress-idor-no-ownership-check
+    patterns:
+      - pattern: |
+          $id = $_GET['id'];
+          ...
+          $item = get_$MODEL($id);
+          ...
+      - pattern-not-inside: |
+          if ($item->user_id === get_current_user_id()) {
+            ...
+          }
+      - pattern-not-inside: |
+          if (current_user_can('manage_options')) {
+            ...
+          }
+    message: "IDOR: ID-based access without ownership verification"
+    languages: [php]
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: CWE-639
+      confidence: LOW
+
+  # ========================================
+  # Shortcode Injection - Unescaped Attributes
+  # ========================================
+
+  - id: wordpress-shortcode-xss
+    patterns:
+      - pattern: |
+          function $FUNC($atts) {
+            ...
+            return "..." . $atts[...] . "...";
+          }
+      - pattern-not: |
+          function $FUNC($atts) {
+            ...
+            return "..." . esc_html($atts[...]) . "...";
+          }
+      - pattern-not: |
+          function $FUNC($atts) {
+            ...
+            return "..." . esc_attr($atts[...]) . "...";
+          }
+    message: "Shortcode XSS: Attribute output without escaping"
+    languages: [php]
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: CWE-79
+      confidence: MEDIUM
+
+  # ========================================
+  # Hook Injection - Dynamic Hook Names
+  # ========================================
+
+  - id: wordpress-hook-injection
+    patterns:
+      - pattern-either:
+          - pattern: add_action($HOOK, ...)
+          - pattern: add_filter($HOOK, ...)
+      - metavariable-pattern:
+          metavariable: $HOOK
+          patterns:
+            - pattern-either:
+                - pattern: $_POST[...]
+                - pattern: $_GET[...]
+    message: "Hook injection: User controls hook name, potential RCE"
+    languages: [php]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-94
+      confidence: HIGH
+
+  # ========================================
+  # Mass Assignment - Direct POST to Database
+  # ========================================
+
+  - id: wordpress-mass-assignment
+    patterns:
+      - pattern-either:
+          - pattern: $wpdb->update($TABLE, $_POST, ...)
+          - pattern: $wpdb->insert($TABLE, $_POST, ...)
+    message: "Mass assignment: Entire $_POST array passed to database without filtering"
+    languages: [php]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-915
+      confidence: HIGH
+
+  # ========================================
+  # wp_mail Header Injection
+  # ========================================
+
+  - id: wordpress-wp-mail-header-injection
+    patterns:
+      - pattern: wp_mail($TO, $SUBJECT, $MESSAGE, $HEADERS, ...)
+      - metavariable-pattern:
+          metavariable: $HEADERS
+          patterns:
+            - pattern-either:
+                - pattern: $_POST[...]
+                - pattern: $_GET[...]
+                - pattern: $_REQUEST[...]
+                - pattern: "... . $_POST[...] . ..."
+                - pattern: "... . $_GET[...] . ..."
+    message: "Email header injection: User input in wp_mail headers enables spam relay/header injection"
+    languages: [php]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-113
+      owasp: A03:2021 - Injection
+      confidence: HIGH
+
+  # ========================================
+  # add_query_arg XSS
+  # ========================================
+
+  - id: wordpress-add-query-arg-xss
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $URL = add_query_arg(...);
+              ...
+              echo $URL;
+          - pattern: echo add_query_arg(...);
+      - pattern-not: echo esc_url(add_query_arg(...));
+      - pattern-not: |
+          $URL = add_query_arg(...);
+          ...
+          echo esc_url($URL);
+    message: "Reflected XSS: add_query_arg() output without esc_url() enables XSS attacks"
+    languages: [php]
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: CWE-79
+      owasp: A03:2021 - Injection
+      confidence: MEDIUM
+
+  # ========================================
+  # wp_redirect Open Redirect
+  # ========================================
+
+  - id: wordpress-wp-redirect-open-redirect
+    patterns:
+      - pattern: wp_redirect($URL, ...)
+      - metavariable-pattern:
+          metavariable: $URL
+          patterns:
+            - pattern-either:
+                - pattern: $_POST[...]
+                - pattern: $_GET[...]
+                - pattern: $_REQUEST[...]
+      - pattern-not: wp_redirect(wp_validate_redirect(...), ...)
+    message: "Open redirect: User-controlled URL in wp_redirect() without wp_validate_redirect()"
+    languages: [php]
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: CWE-601
+      owasp: A01:2021 - Broken Access Control
+      confidence: HIGH
+
+  # ========================================
+  # Post Meta Injection
+  # ========================================
+
+  - id: wordpress-post-meta-injection
+    patterns:
+      - pattern-either:
+          - pattern: update_post_meta($POST_ID, $KEY, ...)
+          - pattern: add_post_meta($POST_ID, $KEY, ...)
+      - metavariable-pattern:
+          metavariable: $KEY
+          patterns:
+            - pattern-either:
+                - pattern: $_POST[...]
+                - pattern: $_GET[...]
+                - pattern: $_REQUEST[...]
+    message: "Post meta injection: User controls meta key, can modify arbitrary post metadata"
+    languages: [php]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-915
+      confidence: HIGH
+
+  # ========================================
+  # Direct File Access - Missing ABSPATH
+  # ========================================
+
+  - id: wordpress-direct-file-access-bypass
+    patterns:
+      - pattern-not-inside: |
+          if (!defined('ABSPATH')) {
+            ...
+          }
+      - pattern-not-inside: |
+          defined('ABSPATH') || exit;
+      - pattern-not-inside: |
+          if (!defined('WPINC')) {
+            ...
+          }
+      - pattern-either:
+          - pattern: class $CLASS { ... }
+          - pattern: function $FUNC(...) { ... }
+    message: "Direct file access: Missing ABSPATH check allows direct PHP execution"
+    languages: [php]
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: CWE-425
+      confidence: MEDIUM

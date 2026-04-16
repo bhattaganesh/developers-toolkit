@@ -1,0 +1,14 @@
+{
+  "name": "modular-security-audit",
+  "version": "1.2.3",
+  "description": "Comprehensive modular security audit for WordPress plugins using 5-phase methodology with expert validation, exploitability verification, vulnerability chaining analysis, fully automated test environment setup via WP-CLI, automated pre-scan, and Playwright/Chrome DevTools MCP integration",
+  "author": "Security Audit Team",
+  "trigger_patterns": [
+    "modular security audit",
+    "feature-by-feature audit",
+    "comprehensive security review",
+    "audit plugin security"
+  ],
+  "prompt_file": "prompt.md",
+  "agent_mode": true
+}

@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "_comment": "Developers - Managed Settings Template for Enterprise Deployment",
+  "_description": "Deploy this file to system-level location to enforce organization-wide policies",
+  "_locations": {
+    "macOS": "/Library/Application Support/ClaudeCode/managed-settings.json",
+    "Linux": "/etc/claude-code/managed-settings.json",
+    "Windows": "C:\\Program Files\\ClaudeCode\\managed-settings.json"
+  },
+
+  "strictKnownMarketplaces": [
+    {
+      "_comment": "Enforce Developers plugin marketplace - configure your repo",
+      "source": "github",
+      "repo": "bhattaganesh/developers-toolkit",
+      "ref": "main"
+    }
+  ],
+
+  "permissions": {
+    "allow": [
+      "_comment: Allow safe development commands",
+      "Bash(npm run lint)",
+      "Bash(npm run lint:*)",
+      "Bash(npm run test)",
+      "Bash(npm run test *)",
+      "Bash(npm run dev)",
+      "Bash(npm run build)",
+      "Bash(composer test)",
+      "Bash(composer lint)",
+      "Bash(./vendor/bin/phpunit)",
+      "Bash(./vendor/bin/phpunit *)",
+      "Bash(./vendor/bin/phpstan *)",
+      "Bash(php wp test)",
+      "Bash(php wp test *)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git show *)"
+    ],
+    "deny": [
+      "_comment: Block sensitive files and destructive commands",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.ssh/id_*)",
+      "Read(.envrc)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(rm -rf *)",
+      "Bash(wp db reset)",
+      "Bash(wp db drop)",
+      "Bash(DROP TABLE *)",
+      "Bash(drop database *)",
+      "Bash(git push * --force)",
+      "Bash(git add .env)",
+      "Bash(git add **/.env)"
+    ],
+    "ask": [
+      "_comment: Prompt for potentially risky operations",
+      "Bash(git push *)",
+      "Bash(npm publish)",
+      "Bash(composer publish)",
+      "Bash(docker *)",
+      "Write(.github/workflows/*)"
+    ]
+  },
+
+  "allowManagedPermissionRulesOnly": false,
+  "allowManagedHooksOnly": false,
+  "disableBypassPermissionsMode": "disable",
+
+  "allowedMcpServers": [
+    {
+      "serverName": "github"
+    },
+    {
+      "serverName": "git"
+    },
+    {
+      "serverName": "brave-search"
+    },
+    {
+      "serverName": "memory"
+    }
+  ],
+
+  "deniedMcpServers": [
+    {
+      "_comment": "Block direct filesystem access - use Claude's built-in tools instead",
+      "serverName": "filesystem"
+    }
+  ],
+
+  "autoCompactThreshold": 50,
+  "model": "claude-sonnet-4-5-20250929",
+  "availableModels": ["sonnet", "haiku"],
+
+  "companyAnnouncements": [
+    "Developers plugin installed - use /developers:code-review before submitting PRs",
+    "Security reminder: Always run /developers:security-check on code handling user input",
+    "Review coding standards: /developers:rules"
+  ],
+
+  "env": {
+    "_comment": "Optional environment variables for telemetry or custom configuration"
+  }
+}
+
+

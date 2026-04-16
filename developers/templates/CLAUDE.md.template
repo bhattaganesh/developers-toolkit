@@ -1,0 +1,78 @@
+# {{PLUGIN_NAME}}
+
+## Plugin Identity
+- **Slug:** {{plugin-slug}}
+- **Prefix:** {{PLUGIN_PREFIX}} (all functions, hooks, constants, option keys, CSS classes)
+- **Text Domain:** {{plugin-slug}}
+- **Namespace:** {{Vendor\PluginName}}
+- **Requires WP:** {{6.x}}+ | **Requires PHP:** {{8.1}}+
+- **License:** GPL-2.0-or-later
+
+## Tech Stack
+- PHP {{8.1+}}, WordPress {{6.x}}
+- Composer (WPCS + PHPStan with WP stubs + PHPUnit)
+- {{Node/npm — block editor assets only, delete if not applicable}}
+
+## File Structure
+{{plugin-slug}}.php          -> Plugin header + bootstrap (require_once only)
+includes/
+  class-{{slug}}-loader.php  -> All add_action / add_filter registrations
+  class-{{slug}}-admin.php   -> Admin pages (Settings API)
+  class-{{slug}}-ajax.php    -> AJAX handlers (wp_ajax_ + wp_ajax_nopriv_)
+  class-{{slug}}-rest.php    -> REST endpoints (register_rest_route)
+  class-{{slug}}-cpt.php     -> Custom post types + taxonomies
+assets/
+  js/admin.js
+  css/admin.css
+tests/
+  bootstrap.php              -> WP test suite bootstrap
+  test-{{feature}}.php
+uninstall.php                -> Required: deletes all options, meta, tables
+
+## Dev Commands
+# Quality
+composer lint                -> vendor/bin/phpcs (WPCS via phpcs.xml)
+composer format              -> vendor/bin/phpcbf (auto-fix WPCS violations)
+composer phpstan             -> vendor/bin/phpstan analyse (with szepeviktor/phpstan-wordpress)
+
+# Testing
+composer test                -> vendor/bin/phpunit
+wp-env start                 -> Local WP environment (@wordpress/env)
+wp-env run tests phpunit     -> PHPUnit inside wp-env container
+
+# WP-CLI (local dev)
+wp plugin check {{plugin-slug}}           -> Plugin Check (pre-submission)
+wp scaffold plugin-tests {{plugin-slug}}  -> One-time WP test suite setup
+wp i18n make-pot . languages/{{plugin-slug}}.pot
+wp eval-file scripts/seed-test-data.php
+
+## Security Non-Negotiables (6 rules, enforced on every file)
+1. Sanitize at ENTRY: `sanitize_text_field()` / `absint()` / `wp_kses_post()`
+2. Escape at OUTPUT: `esc_html()` / `esc_attr()` / `esc_url()` — at the echo, not before
+3. Nonce on EVERY form (`wp_nonce_field`) and FIRST LINE of every AJAX handler (`check_ajax_referer`)
+4. `current_user_can()` before EVERY privileged operation
+5. `$wpdb->prepare()` for EVERY query with user-controlled values — no exceptions
+6. `defined('ABSPATH') || exit;` at the top of EVERY PHP file
+
+## Gotchas
+<!-- Add plugin-specific gotchas as discovered -->
+- `remove_action()` must match the EXACT priority used in `add_action()` — wrong priority silently fails
+- `get_option()` autoloads by default — pass `false` as third arg to disable for rarely-used options
+- `wp_ajax_nopriv_` is reachable by unauthenticated users — verify intent explicitly
+- REST `permission_callback` missing → 403 in WP 5.5+; `__return_true` = public write endpoint
+- Nonce action string in `wp_create_nonce()` MUST match `wp_verify_nonce()` exactly
+- Flush rewrite rules ONLY in activation hook — never on `init`
+- CPT registration must run on `init`, NOT `plugins_loaded`
+- Multisite: `get_option()` vs `get_network_option()` — decide before writing data layer
+
+## Current Focus
+Working on: ...
+Next up: ...
+Branch: ...
+
+## Imports
+<!-- Org standards loaded via: /plugin install developers -->
+<!-- wordpress-context skill auto-activates on wp-content/**/*.php -->
+<!-- rules/wordpress.md auto-loads on all WP PHP files (WPCS, security, hooks, DB) -->
+<!-- wp-reviewer + security-auditor available via /code-review -->
+<!-- Full WP.org checklist via /wp-org-submission -->

@@ -1,0 +1,36 @@
+{
+  "name": "developers",
+  "owner": {
+    "name": "Ganesh Bhatta",
+    "email": "bhattaganesh05@gmail.com"
+  },
+  "metadata": {
+    "description": "Developer toolkit for WordPress and React: 24 agents, 34 commands, 11 rules, and 13 skills",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "developers",
+      "source": "./developers",
+      "description": "Developer toolkit for WordPress and React: 24 agents, 34 commands, 11 rules, and 13 skills",
+      "version": "1.0.0",
+      "author": { "name": "Ganesh Bhatta" },
+      "category": "productivity",
+      "tags": [
+        "agents",
+        "commands",
+        "rules",
+        "hooks",
+        "skills",
+        "wordpress",
+        "react",
+        "security",
+        "testing",
+        "code-review",
+        "scaffolding",
+        "profiling",
+        "debugging"
+      ]
+    }
+  ]
+}

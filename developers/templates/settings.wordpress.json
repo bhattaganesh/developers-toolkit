@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "_comment": "WordPress Plugin — Copy to .claude/settings.json. Extends developers plugin base settings.",
+
+  "autoCompactThreshold": 50,
+
+  "permissions": {
+    "allow": [
+      "Bash(./vendor/bin/phpcs)",
+      "Bash(./vendor/bin/phpcs *)",
+      "Bash(./vendor/bin/phpcbf)",
+      "Bash(./vendor/bin/phpcbf *)",
+      "Bash(./vendor/bin/phpunit)",
+      "Bash(./vendor/bin/phpunit *)",
+      "Bash(./vendor/bin/phpstan *)",
+      "Bash(composer lint)",
+      "Bash(composer format)",
+      "Bash(composer phpstan)",
+      "Bash(composer test)",
+      "Bash(composer test *)",
+      "Bash(php -l *)",
+      "Bash(wp plugin activate *)",
+      "Bash(wp plugin deactivate *)",
+      "Bash(wp plugin list *)",
+      "Bash(wp plugin check *)",
+      "Bash(wp eval-file *)",
+      "Bash(wp option get *)",
+      "Bash(wp option update *)",
+      "Bash(wp transient delete *)",
+      "Bash(wp cache flush)",
+      "Bash(wp rewrite flush)",
+      "Bash(wp scaffold plugin-tests *)",
+      "Bash(wp scaffold block *)",
+      "Bash(wp scaffold post-type *)",
+      "Bash(wp scaffold taxonomy *)",
+      "Bash(wp i18n make-pot *)",
+      "Bash(wp i18n make-json *)",
+      "Bash(wp --info)",
+      "Bash(wp-env start)",
+      "Bash(wp-env stop)",
+      "Bash(wp-env clean)",
+      "Bash(wp-env run tests phpunit *)",
+      "Bash(npx wp-scripts build)",
+      "Bash(npx wp-scripts start)",
+      "Bash(npm run build)",
+      "Bash(npm run start)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git show *)",
+      "Bash(git branch *)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Bash(rm -rf *)",
+      "Bash(git push * --force)",
+      "Bash(git add .env)",
+      "Bash(wp db drop *)",
+      "Bash(wp db reset *)",
+      "Bash(wp user create *)",
+      "Bash(wp user delete *)"
+    ]
+  },
+
+  "spinnerVerbs": {
+    "mode": "append",
+    "verbs": [
+      "Analyzing WordPress hooks",
+      "Scanning for security issues",
+      "Running WPCS checks",
+      "Validating plugin structure",
+      "Checking REST endpoints"
+    ]
+  }
+}
