@@ -349,6 +349,40 @@ Ready-to-use GitHub Actions at `developers/templates/github-actions/`:
 
 ---
 
+## Prompt Engineering Examples: How to Talk to the Toolkit
+
+To get the best results out of the `developers` plugin, your prompts should be specific and leverage the specialized agents directly or use the slash commands. Here are realistic examples of highly effective prompts:
+
+### 💡 Interacting with Review Agents
+Review agents are read-only experts. To use them, explicitly ask Claude to use that specific agent.
+
+*   **Security Audit:**
+    > `Use the security-auditor agent to review the new settings save handler I just implemented in includes/admin/settings.php. Look for OWASP top 10 vulnerabilities, specifically verifying my nonce implementation.`
+*   **Performance Profiling:**
+    > `Ask the performance-optimizer agent to review the data queries in the Dashboard component (src/components/Dashboard.tsx). Tell it to look for layout thrashing and extra re-renders.`
+*   **Architecture Review:**
+    > `I need the architect agent to review my plan for the new 'Notification System'. Are there any scalability bottlenecks?`
+
+### 🏗️ Using Developer Agents
+Developer agents generate code. Always give them context about *where* to look for patterns.
+
+*   **React Components:**
+    > `Ask the frontend-developer agent to create a new 'PricingModal' component in src/components/. It should adopt the exact Tailwind CSS styling patterns found in 'SubscriptionCard.tsx'.`
+*   **WordPress Features:**
+    > `Use the wp-developer agent to build a new REST API endpoint to handle user onboarding. Tell it to follow the exact validation patterns seen in 'class-user-profile-rest.php'.`
+
+### 🚀 Using Multi-Agent Commands
+Commands are the most powerful way to interact. You simply type the slash command and your instructions.
+
+*   **Pre-PR Review:**
+    > `/developers:code-review I am about to push changes for the Stripe webhook integration. Focus heavily on security issues in webhook.php and check if my Event handler conforms to our PHP design patterns.`
+*   **Debugging Complex Issues:**
+    > `/developers:debug The 'sync_users' background process is failing silently in production after 500 records. Attached is the error log. Trace the execution flow.`
+*   **Test Generation:**
+    > `/developers:write-tests Generate a complete PHPUnit test suite for 'class-subscription-manager.php'. Include successful renewal scenarios.`
+
+---
+
 ## Priority Summary — Quick Reference
 
 | Priority | Phase | Command / Feature | Frequency |
