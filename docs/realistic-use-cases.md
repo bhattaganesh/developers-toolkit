@@ -22,11 +22,23 @@ A sequential, prioritized guide for managing projects effectively using the `dev
 
 **When:** Once per machine (user scope) or once per project (project scope).
 
-### 1.2 `/developers:scaffold-project` — Initialize Project Standards
+### 1.2 `/developers:claude-code-setup` — Initialize Project Standards
 
-**What:** Generates a `CLAUDE.md` + `.claude/settings.json` tailored to the detected stack (WordPress, React, or mixed).
+**What:** Runs a project diagnostic and generates a `CLAUDE.md` + `.claude/settings.json` tailored to the detected stack. Includes `projectId` tracking.
 
 **When:** The **very first thing** you do when starting work on any project. This sets up the foundation that makes every other command work better.
+
+### 1.3 `/developers:health-check` — Daily Project Pulse
+
+**What:** Audits the current project health, detects config drift, missing dependencies, or dirty git states.
+
+**When:** Every morning or after complex merges. It ensures your environment is at "200x Productivity" readiness.
+
+### 1.4 `/developers:claude-md-improve` — Maintain Docs Accuracy
+
+**What:** Audits existing `CLAUDE.md` files, scores them on a 100-point rubric, and proposes missing commands or architecture details.
+
+**When:** After adding new build tools, changing folder structures, or whenever you feel the AI is losing track of project standards.
 
 **Scenario:** You clone a new client repo. Run this command — it detects the stack (WordPress + React), generates a CLAUDE.md with the right commands, tech stack, and project structure. Every future Claude Code session in this project now has context.
 
@@ -42,7 +54,6 @@ These load **automatically** when you edit matching files. Zero invocation neede
 |-------|-------------|--------------|
 | `wordpress-context` | WP plugin/theme files | WPCS standards, security patterns, and API conventions |
 | `react-context` | `.jsx`, `.tsx`, `components/`, `hooks/` | Component architecture, hooks rules, Tailwind conventions |
-| `wordpress-context` | WP plugin/theme files | WPCS reminders, nonce/capability checklist |
 | `testing-context` | `tests/`, `*Test.php`, `*.test.tsx` | Assertion best practices, test quality guidelines |
 | `rules` | On demand ("check coding standards") | Standard rules: WordPress, React, security, testing, API design, git, etc. |
 
@@ -55,7 +66,7 @@ These load **automatically** when you edit matching files. Zero invocation neede
 **When:** Every time you need a new feature in a WordPress plugin.
 
 **Scenario:**
-> You: `/developers:new-wp-feature`
+> You: `/developers:wp-new-feature`
 > Claude: "What feature?" → `CustomPostType` with `Book` name
 > Result: Files created, following your project's existing patterns. Tests pass immediately.
 
@@ -106,15 +117,17 @@ These load **automatically** when you edit matching files. Zero invocation neede
 | Hook | What It Catches |
 |------|----------------|
 | PHP Syntax Check | `php -l` immediately catches syntax errors in PHP files |
+| WPCS Check | `phpcs` validation for WordPress coding standards |
 | ESLint Fix | Auto-fixes JS/TS/JSX/TSX lint issues after every edit |
 | CSS Prettier | Auto-formats CSS/SCSS after every edit |
 | Test Suggestion | Reminds you when a related test file exists for the code you edited |
+| Block Validation | Validates Gutenberg `block.json` fields and apiVersion |
 
 ### 3.2 PreToolUse Hooks (Before Commands Run)
 
 | Hook | What It Blocks |
 |------|---------------|
-| Block Destructive Commands | Stops `wp db reset`, `wp db drop`, `rm -rf`, `DROP TABLE`, `--force` |
+| Block Destructive Commands | Stops `rm -rf`, `DROP TABLE`, `--force`, `wp db reset` |
 | Block .env Commits | Stops `git add .env` from ever happening |
 
 ### 3.3 Session Lifecycle Hooks
@@ -163,7 +176,7 @@ Consolidates findings by severity: **Critical → High → Medium → Low**.
 
 **Scenario:** You've refactored the payment flow touching PHP services, React components, and API routes. Three agents review simultaneously. The php-reviewer catches a missing type hint, the react-reviewer spots a missing `useCallback` dependency, and the security-auditor flags unsanitized user input.
 
-### 4.3 `/developers:security-check` — Focused Security Audit
+### 4.3 `/developers:security-scan` — Focused Security Audit
 
 **What:** Runs the `security-auditor` agent specifically for OWASP top 10 vulnerabilities.
 
@@ -359,7 +372,7 @@ Review agents are read-only experts. To use them, explicitly ask Claude to use t
 *   **Security Audit:**
     > `Use the security-auditor agent to review the new settings save handler I just implemented in includes/admin/settings.php. Look for OWASP top 10 vulnerabilities, specifically verifying my nonce implementation.`
 *   **Performance Profiling:**
-    > `Ask the performance-optimizer agent to review the data queries in the Dashboard component (src/components/Dashboard.tsx). Tell it to look for layout thrashing and extra re-renders.`
+    > `Ask the perf-analyzer agent to review the data queries in the Dashboard component (src/components/Dashboard.tsx). Tell it to look for layout thrashing and extra re-renders.`
 *   **Architecture Review:**
     > `I need the architect agent to review my plan for the new 'Notification System'. Are there any scalability bottlenecks?`
 
@@ -388,7 +401,7 @@ Commands are the most powerful way to interact. You simply type the slash comman
 | Priority | Phase | Command / Feature | Frequency |
 |----------|-------|-------------------|-----------|
 | **P0** | Setup | Install plugin (`/plugin install`) | Once |
-| **P0** | Setup | `/developers:scaffold-project` | Once per project |
+| **P0** | Setup | `/developers:claude-code-setup` | Once per project |
 | **P1** | Build | Context skills (auto-activate) | Every session (automatic) |
 | **P1** | Build | `/developers:new-wp-feature` | Per new feature |
 | **P1** | Build | `/developers:new-component` | Per new UI component |
@@ -405,7 +418,7 @@ Commands are the most powerful way to interact. You simply type the slash comman
 | **P4** | Release | `/developers:deploy-check` | Before each deployment |
 | **P4** | Release | `/developers:changelog` | Before each release |
 | **P4** | Release | `/developers:api-docs` | When API changes |
-| **P5** | Audit | `/developers:security-check` | Security-sensitive changes |
+| **P5** | Audit | `/developers:security-scan` | Security-sensitive changes |
 | **P5** | Audit | `/developers:test-gaps` | Weekly / sprint review |
 | **P6** | Advanced | Security fix / modular audit skills | Quarterly or on report |
 | **P6** | Advanced | Accessibility / UX audit skills | Before major UI releases |
@@ -423,7 +436,7 @@ Morning:
   → Hooks auto-lint your code as you write
 
 Building:
-  → /developers:new-wp-feature   (scaffold WP features)
+  → /developers:wp-new-feature   (scaffold WP features)
   → /developers:new-component   (scaffold React components)
   → /developers:explain         (understand existing flows)
 
@@ -432,6 +445,7 @@ Stuck:
   → /developers:fix-tests       (diagnose test failures)
 
 Ready for PR:
+  → /developers:security-scan     (targeted security audit)
   → /developers:pre-pr          (quality gate — run first)
   → /developers:code-review     (multi-agent review)
   → /developers:commit-push-pr  (commit + push + PR in one step)

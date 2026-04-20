@@ -53,4 +53,4 @@ Implement a complete, production-ready security patch for a WordPress plugin or 
 ## Dependencies
 
 This command activates the **security-fix** skill bundled with the developers plugin.
-To find vulnerabilities first, run `/developers:modular-security-audit` or `/developers:security-check`.
+To find vulnerabilities first, run `/developers:modular-security-audit` or `/developers:security-scan`.

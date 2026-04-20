@@ -2,7 +2,7 @@
 
 Complete developer toolkit for WordPress and React developers — distributed as a single native Claude Code plugin.
 
-**23 agents (20 standard + 3 expert-panel), 34 commands, 10 rules, 5 hooks, 14 skills — one install.**
+**10 super-agents, 39 commands, 13 rules, 7 hooks, 21 skills — one install.**
 
 ---
 
@@ -28,14 +28,14 @@ When installing, choose a scope:
 
 ---
 
-## Agents (23)
+## Agents (25)
 
 ### Review Agents (read-only — never modify files)
 
 | Agent | What It Reviews |
 |-------|----------------|
 | `security-auditor` | SQL injection, XSS, missing auth, hardcoded secrets, CSRF gaps |
-| `security-analyst` | Deep vulnerability analysis and threat modeling specialists |
+| `security-analyst` | Threat modeling, GDPR compliance, audit logging, defense-in-depth architecture |
 | `php-reviewer` | PHP code standards, type hints, and platform-specific patterns |
 | `wp-reviewer` | WordPress standards: sanitize/escape, nonces, capabilities, $wpdb |
 | `react-reviewer` | Component architecture, hooks rules, NextJS, and Tailwind conventions |
@@ -58,6 +58,8 @@ When installing, choose a scope:
 | `frontend-developer` | Writes React/NextJS components, hooks, and state management |
 | `frontend-designer` | Designs and builds polished, responsive UI with Tailwind CSS |
 | `wp-developer` | Writes WordPress plugin/theme code: CPTs, REST, admin pages |
+| `wp-block-developer` | Builds Gutenberg blocks: block.json, edit/save, dynamic render, deprecations |
+| `wp-interactivity-developer` | Builds Interactivity API features: store, data-wp-* directives, SSR init |
 | `dba` | Database schema design, query optimization, and migration planning |
 | `css-expert` | Solves complex CSS/Tailwind layouts and responsive patterns |
 | `ui-designer` | High-fidelity UI design and visual consistency |
@@ -65,29 +67,31 @@ When installing, choose a scope:
 
 ---
 
-## Commands (34)
+## Commands (36)
 
 | Category | Commands |
 |----------|----------|
-| **Core** | `/pre-pr`, `/code-review`, `/security-check`, `/debug`, `/explain` |
-| **Scaffolding** | `/scaffold-project`, `/new-component`, `/new-wp-feature` |
+| **Core** | `/pre-pr`, `/code-review`, `/security-scan`, `/debug`, `/explain` |
+| **Scaffolding** | `/claude-code-setup`, `/new-component`, `/wp-new-feature`, `/wp-build-block` |
 | **Testing** | `/write-tests`, `/test-gaps`, `/fix-tests` |
 | **Quality** | `/a11y-check`, `/accessibility-audit`, `/ux-audit`, `/ux-review` |
 | **Security** | `/security-fix`, `/modular-security-audit` |
 | **Performance** | `/profile`, `/api-consistency`, `/impact-analysis` |
 | **Ops** | `/commit-push-pr`, `/deploy-check`, `/changelog`, `/jira-issue` |
 | **Architecture** | `/expert-panel`, `/refactor`, `/api-docs`, `/db-design` |
-| **Docs** | `/wiki-docs`, `/wp-org-submission` |
+| **WordPress** | `/wp-org-submission`, `/wp-playground-test` |
+| **Docs** | `/wiki-docs` |
 
 ---
 
-## Rules (10)
+## Rules (11)
 
 Coding standards that auto-apply based on file globs.
 
 | Rule | Covers |
 |------|--------|
 | `wordpress.md` | Security (sanitize/escape/nonce), plugin standards, hooks |
+| `block-editor.md` | Gutenberg block development, apiVersion 3, block.json standards |
 | `react.md` | Component architecture, hooks, NextJS, Tailwind CSS |
 | `security.md` | Secrets, input validation, output encoding, auth |
 | `testing.md` | PHPUnit, Jest, test quality, coverage requirements |
@@ -100,54 +104,63 @@ Coding standards that auto-apply based on file globs.
 
 ---
 
-## Hooks (5)
+## Hooks (7)
+
+### SessionStart
+
+| Trigger | Action |
+|---------|--------|
+| Session begins | Detects project stack (WordPress, React, Laravel, etc.) |
 
 ### PostToolUse (auto-run after file edits)
 
 | Trigger | Action |
 |---------|--------|
-| Edit `.php` file | `php -l` syntax check + PHPStan analysis (if installed) |
+| Edit `.php` file | `php -l` syntax check |
+| Edit `.php` file | `phpcs --standard=WordPress` coding standards check |
 | Edit `.js/.jsx/.ts/.tsx` file | `npx eslint --fix` |
 | Edit `.css/.scss` file | `npx prettier --write` |
-| Edit migration file | `php -l` syntax check |
-| Edit `app/**/*.php` | Suggests related test file if it exists |
-
-### PreToolUse (blocks dangerous commands)
-
-| Trigger | Action |
-|---------|--------|
-| Destructive command | Blocks `wp db reset`, `wp db drop`, `rm -rf`, `DROP TABLE`, `drop database`, `--force` |
-| Committing .env | Blocks `git add .env` (allows `.env.example`) |
-
-### Stop (auto-run after Claude responds)
-
-| Trigger | Action |
-|---------|--------|
-| Claude finishes responding | Auto-detects and runs test suite (PHPUnit, Pest, Jest, Vitest, or npm test) |
+| Edit any file | Suggests related test file |
+| Edit `block.json` | Validates apiVersion, required fields, viewScriptModule usage |
 
 ---
 
-## Skills (14)
+## Skills (20)
 
 ### Context Skills (auto-activate based on files you're editing)
 
 | Skill | Auto-activates When |
 |-------|-------------------|
-| `rules` | User mentions "coding standards" or "project standards" |
+| `coding-standards` | User mentions "coding standards", "project standards", or "enforce rules" |
 | `react-context` | Editing `.jsx`, `.tsx` files or `components/`, `pages/`, `hooks/` |
 | `wordpress-context` | Editing WordPress plugin/theme files |
 | `testing-context` | Editing files in `tests/` or `*Test.php`, `*.test.js`, `*.spec.tsx` |
 
-### Workflow Skills (activate based on conversation context)
+### WordPress Skills
 
 | Skill | Use When |
 |-------|----------|
+| `wp-project-triage` | Classifying an unknown WordPress project (plugin/theme/block theme/FSE) |
+| `wp-block-development` | Creating or editing Gutenberg blocks |
+| `wp-interactivity-api` | Adding interactivity with data-wp-* directives and store() |
+| `wp-block-themes` | Building FSE themes: theme.json, templates, parts, patterns |
+| `wp-wpcli-and-ops` | Running WP-CLI commands with safe backup/dry-run protocol |
+| `wp-playground` | Spinning up a disposable WordPress environment for quick testing |
+| `wp-org-submission` | Preparing a plugin for WordPress.org submission |
+
+### Workflow Skills
+
+| Skill | Use When |
+|-------|----------|
+| `git-automation` | Committing, pushing, and creating PRs with conventional commits |
 | `security-fix` | Fixing CVEs, bug bounty reports, security audit findings |
-| `modular-security-audit` | Pre-release audits, security reviews, WordPress.org submission prep |
-| `accessibility-audit` | WCAG 2.2 compliance audits, accessibility reviews |
+| `modular-security-audit` | Pre-release audits, security reviews |
+| `accessibility-audit` | WCAG 2.2 compliance audits |
 | `chrome-debug` | Browser debugging with Chrome DevTools |
-| `dev-docs` | Generating documentation for codebases |
 | `ux-reviewer` | UX review and usability analysis |
+| `wiki-docs` | Generating documentation for codebases |
+| `jira-issue-creator` | Creating structured Jira issues from bugs or feature requests |
+| `expert-panel` | Multi-expert panel review: architecture, security, UX, performance |
 
 ---
 
@@ -168,48 +181,38 @@ Coding standards that auto-apply based on file globs.
 ```
 developers/
 ├── .claude-plugin/plugin.json     # Plugin manifest
-├── agents/                        # 23 agents
-│   ├── security-auditor.md
-│   ├── security-analyst.md
-│   ├── php-reviewer.md
-│   ├── wp-reviewer.md
-│   ├── react-reviewer.md
-│   ├── test-critic.md
-│   ├── perf-analyzer.md
-│   ├── debug-agent.md
-│   ├── design-patterns-reviewer.md
-│   ├── code-profiler.md
-│   ├── impact-analyzer.md
-│   ├── a11y-checker.md
-│   ├── api-consistency.md
-│   ├── architect.md
-│   ├── senior-engineer.md
-│   ├── frontend-developer.md
-│   ├── frontend-designer.md
-│   ├── css-expert.md
-│   ├── ui-designer.md
-│   ├── ux-auditor.md
-│   ├── ux-designer.md
-│   ├── dba.md
-│   └── wp-developer.md
-├── commands/                      # 34 commands (partial list)
+├── agents/                        # 10 super-agents
+│   ├── wordpress-pro.md
+│   ├── react-pro.md
+│   ├── security-pro.md
+│   ├── ux-pro.md
+│   ├── architect-pro.md
+│   ├── qa-pro.md
+│   ├── data-pro.md
+│   ├── vibe-pro.md
+│   ├── perf-pro.md
+│   └── php-core.md
+├── commands/                      # 39 commands
 │   ├── pre-pr.md
 │   ├── code-review.md
-│   ├── security-check.md
+│   ├── security-scan.md
 │   ├── debug.md
 │   ├── explain.md
 │   ├── expert-panel.md
-│   ├── scaffold-project.md
+│   ├── claude-code-setup.md
 │   ├── new-component.md
-│   ├── new-wp-feature.md
+│   ├── wp-new-feature.md
+│   ├── wp-build-block.md
+│   ├── wp-playground-test.md
 │   ├── write-tests.md
 │   ├── test-gaps.md
 │   ├── fix-tests.md
 │   ├── modular-security-audit.md
 │   ├── chrome-debug.md
 │   └── wiki-docs.md
-├── rules/                         # 10 rules
+├── rules/                         # 11 rules
 │   ├── wordpress.md
+│   ├── block-editor.md
 │   ├── react.md
 │   ├── security.md
 │   ├── testing.md
@@ -219,18 +222,28 @@ developers/
 │   ├── error-handling.md
 │   ├── env-validation.md
 │   └── git-workflow.md
-├── hooks/hooks.json               # 5 hooks
-├── skills/                        # 14 skills
+├── hooks/hooks.json               # 7 hooks
+├── skills/                        # 21 pro-skills
 │   ├── wordpress-context/
 │   ├── react-context/
 │   ├── testing-context/
+│   ├── coding-standards/
+│   ├── wp-project-triage/
+│   ├── wp-block-development/
+│   ├── wp-interactivity-api/
+│   ├── wp-block-themes/
+│   ├── wp-wpcli-and-ops/
+│   ├── wp-playground/
+│   ├── wp-org-submission/
+│   ├── git-automation/
 │   ├── security-fix/
 │   ├── modular-security-audit/
 │   ├── accessibility-audit/
 │   ├── expert-panel/
 │   ├── chrome-debug/
 │   ├── wiki-docs/
-│   └── ux-reviewer/
+│   ├── ux-reviewer/
+│   └── jira-issue-creator/
 └── README.md
 ```
 

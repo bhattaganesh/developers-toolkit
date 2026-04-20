@@ -1,6 +1,9 @@
 ---
 name: testing-context
-description: "Auto-activates when working on test files. Use this skill when editing files in tests/ directory or files ending in Test.php, .test.js, .test.tsx, .spec.js, .spec.tsx. Provides test quality guidelines and assertion best practices."
+description: >
+  This skill should be used when the user is editing test files in a tests/ directory
+  or files named Test.php, .test.js, .test.tsx, .spec.js, or .spec.tsx.
+  Provides test quality guidelines, assertion best practices, and TDD patterns.
 version: 1.0.0
 ---
 

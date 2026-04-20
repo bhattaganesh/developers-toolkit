@@ -1,6 +1,11 @@
 ---
 name: security-fix
-description: Use when the user asks to "fix a security issue/vulnerability/bug", "handle/address a security report", "patch/remediate/mitigate a vulnerability", "fix CVE/IDOR/RCE", "implement security fix/patch", mentions "security audit", "bug bounty", "HackerOne", "Wordfence", "Patchstack", "WPScan", discusses "authentication/authorization bug/bypass", "XSS/SQL injection/CSRF/path traversal", "nonce verification", "capability check", "sanitize inputs", "escape outputs", or needs to implement a security patch in WordPress plugins, themes, or core.
+description: >
+  This skill should be used when the user asks to "fix a security issue", "fix a vulnerability",
+  "handle a security report", "patch a CVE", "fix IDOR/RCE/XSS/SQL injection/CSRF",
+  "implement a security fix", or mentions "bug bounty", "HackerOne", "Wordfence",
+  "Patchstack", "WPScan", "nonce verification", "capability check", "sanitize inputs",
+  "escape outputs", or needs to implement a security patch in WordPress plugins, themes, or core.
 version: 2.0.0
 tools: Read, Glob, Grep, Edit, Write, Bash, Task
 context: fork

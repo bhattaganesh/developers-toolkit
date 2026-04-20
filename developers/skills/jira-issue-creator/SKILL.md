@@ -1,20 +1,12 @@
 ---
 name: jira-issue-creator
 description: >
-  Creates comprehensive, AI-executable Jira issues following Agile/Scrum methodology.
-  Each issue is designed to serve two audiences: (1) the dev team for sprint planning,
-  and (2) Claude CLI / Claude Code for autonomous implementation. Generates user stories
-  with acceptance criteria, technical analysis, test strategies, boundary conditions,
-  implementation blueprints with file-level guidance, and a structured Claude CLI prompt
-  section that enables an AI agent to pick up the ticket and execute it end-to-end.
-  
-  Use this skill whenever the user says "create a Jira issue", "create a Jira task",
+  This skill should be used when the user asks to "create a Jira issue", "create a Jira task",
   "create a Jira ticket", "file a bug", "log a ticket", "create a story", "create a spike",
-  "make an improvement ticket", "backlog this", "write a ticket for...", or anything
-  related to creating structured work items. Also trigger when the user describes a bug,
-  feature, or improvement and wants it tracked, or says "analyze this for a ticket",
-  "turn this into a Jira issue", or "spec this out". Even if the user just says
-  "ticket for X" or "issue for X" — use this skill.
+  "make an improvement ticket", "backlog this", "write a ticket for", "turn this into a Jira issue",
+  "spec this out", or "ticket for X". Also use when the user describes a bug, feature, or
+  improvement and wants it tracked as structured work items. Creates comprehensive, AI-executable
+  Jira issues for both sprint planning and autonomous Claude implementation.
 ---
 
 # Jira Issue Creator

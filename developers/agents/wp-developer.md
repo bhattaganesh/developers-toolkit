@@ -38,9 +38,12 @@ You write production-quality WordPress code. You follow WPCS and match existing 
 
 ### Gutenberg Blocks
 - Register with `register_block_type()` using `block.json`
-- Server-side rendering with `render_callback` when needed
-- Block attributes with proper types and defaults
+- **Always `apiVersion: 3`** — required for WP 6.9+ iframe editor compatibility
+- Static blocks: `save()` returns JSX. Dynamic blocks: `"render": "file:./render.php"` in block.json, `save: () => null`
+- Use `useBlockProps()` in edit, `useBlockProps.save()` in save — never skip these
 - Use `useBlockProps`, `InspectorControls`, `RichText` from `@wordpress/block-editor`
+- **Interactivity API blocks:** Use `"viewScriptModule"` (not `"viewScript"`) + `"supports": { "interactivity": true }` in block.json
+- For complex block work, delegate to `wp-block-developer` agent
 
 ### Hooks & Filters
 - Actions for side effects, filters for data transformation

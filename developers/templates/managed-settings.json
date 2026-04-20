@@ -99,7 +99,7 @@
 
   "companyAnnouncements": [
     "Developers plugin installed - use /developers:code-review before submitting PRs",
-    "Security reminder: Always run /developers:security-check on code handling user input",
+    "Security reminder: Always run /developers:security-scan on code handling user input",
     "Review coding standards: /developers:rules"
   ],
 

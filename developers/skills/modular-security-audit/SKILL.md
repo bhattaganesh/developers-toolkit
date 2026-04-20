@@ -1,6 +1,10 @@
 ---
 name: modular-security-audit
-description: Use when user says "run a security audit", "audit this plugin for vulnerabilities", "modular security audit", "pentest this WordPress plugin", "find security issues in this plugin". Comprehensive feature-by-feature security audit for WordPress plugins using 5-phase methodology
+description: >
+  This skill should be used when the user asks to "run a security audit", "audit this plugin
+  for vulnerabilities", "modular security audit", "pentest this WordPress plugin",
+  "find security issues in this plugin", or "do a comprehensive security review".
+  Performs feature-by-feature security audits using a 5-phase methodology.
 version: 1.0.0
 tools: Read, Glob, Grep, Bash, Task
 context: fork

@@ -5,15 +5,15 @@
     "email": "bhattaganesh05@gmail.com"
   },
   "metadata": {
-    "description": "Developer toolkit for WordPress and React: 24 agents, 34 commands, 11 rules, and 13 skills",
-    "version": "1.0.0"
+    "description": "Elite developer toolkit for WordPress and React: 10 super-agents, 39 commands, 13 rules, 7 hooks, and 21 skills",
+    "version": "2.1.0"
   },
   "plugins": [
     {
       "name": "developers",
       "source": "./developers",
-      "description": "Developer toolkit for WordPress and React: 24 agents, 34 commands, 11 rules, and 13 skills",
-      "version": "1.0.0",
+      "description": "Elite developer toolkit for WordPress and React: 10 super-agents, 39 commands, 13 rules, 7 hooks, and 21 skills",
+      "version": "2.1.0",
       "author": { "name": "Ganesh Bhatta" },
       "category": "productivity",
       "tags": [
@@ -29,7 +29,9 @@
         "code-review",
         "scaffolding",
         "profiling",
-        "debugging"
+        "debugging",
+        "i18n",
+        "error-recovery"
       ]
     }
   ]

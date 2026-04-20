@@ -5,7 +5,7 @@
 <div align="center">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Plugin](https://img.shields.io/badge/Plugin-developers%20v1.0.0-blue.svg)](#developers-plugin-toolkit)
+[![Plugin](https://img.shields.io/badge/Plugin-developers%20v2.0.0-blue.svg)](#developers-plugin-toolkit)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 </div>
@@ -46,14 +46,14 @@ When installing, choose a scope:
 
 ## Developers Plugin Toolkit
 
-**One plugin, everything you need.** 23 agents, 34 commands, 10 rules, 5 hooks, 14 skills.
+The Developers Toolkit is an elite, token-optimized plugin for Claude Code. It bundles **10 'Super-Agents'**, **39 commands**, **13 rules**, **7 hooks**, and **21 skills**. Optimized for **Elite Productivity** (200x) and **Minimal Token Usage** through a high-density documentation architecture.
 
 ```bash
 /plugin marketplace add bhattaganesh/developers-toolkit
 /plugin install developers --scope project
 ```
 
-### Agents (23)
+### Agents (25)
 
 **Review agents** (read-only — never modify files):
 
@@ -83,30 +83,34 @@ When installing, choose a scope:
 | `frontend-developer` | Writes React/NextJS components, hooks, and state management |
 | `frontend-designer` | Designs and builds polished, responsive UI with Tailwind CSS |
 | `wp-developer` | Writes WordPress plugin/theme code: CPTs, REST, admin pages |
+| `wp-block-developer` | Builds Gutenberg blocks: block.json, edit/save, dynamic render, deprecations |
+| `wp-interactivity-developer` | Builds Interactivity API features: store, data-wp-* directives, SSR init |
 | `dba` | Database schema design, query optimization, and migration planning |
 | `css-expert` | Solves complex CSS/Tailwind layouts and responsive patterns |
 | `ui-designer` | High-fidelity UI design and visual consistency |
 | `ux-designer` | Interaction design and user journey mapping |
 
-### Commands (34)
+### Commands (36)
 
 | Category | Commands |
 |----------|----------|
-| **Core** | `/pre-pr`, `/code-review`, `/security-check`, `/debug`, `/explain` |
-| **Scaffolding** | `/scaffold-project`, `/new-component`, `/new-wp-feature` |
+| **Core** | `/pre-pr`, `/code-review`, `/security-scan`, `/debug`, `/explain` |
+| **Scaffolding** | `/claude-code-setup`, `/new-component`, `/wp-new-feature`, `/wp-build-block` |
 | **Testing** | `/write-tests`, `/test-gaps`, `/fix-tests` |
 | **Quality** | `/a11y-check`, `/accessibility-audit`, `/ux-audit`, `/ux-review` |
 | **Security** | `/security-fix`, `/modular-security-audit` |
 | **Performance** | `/profile`, `/api-consistency`, `/impact-analysis` |
 | **Ops** | `/commit-push-pr`, `/deploy-check`, `/changelog`, `/jira-issue` |
 | **Architecture** | `/expert-panel`, `/refactor`, `/api-docs`, `/db-design` |
-| **Docs** | `/wiki-docs`, `/wp-org-submission` |
+| **WordPress** | `/wp-org-submission`, `/wp-playground-test` |
+| **Docs** | `/wiki-docs` |
 
-### Rules (10)
+### Rules (11)
 
 | Standard | Covers |
 |----------|--------|
 | `wordpress.md` | Security (sanitize/escape/nonce), plugin standards, hooks |
+| `block-editor.md` | Gutenberg block development, apiVersion 3, block.json standards |
 | `react.md` | Component architecture, hooks, NextJS, Tailwind CSS |
 | `security.md` | Secrets, input validation, output encoding, auth |
 | `testing.md` | PHPUnit, Jest, test quality, coverage requirements |
@@ -117,11 +121,11 @@ When installing, choose a scope:
 | `git-workflow.md` | Commit messages, branching, PR conventions, .gitignore |
 | `env-validation.md` | Ensure env vars exist in .env.example, no env() in code |
 
-### Hooks (5) & Skills (14)
+### Hooks (6) & Skills (20)
 
-**Hooks:** Auto-lint PHP / JS / CSS on save, stack detection on session start, and test suggestions after edits.
+**Hooks:** Auto-lint PHP / JS / CSS on save, WPCS check, block.json validation, stack detection on session start, and test suggestions after edits.
 
-**Skills:** Context skills for React, WordPress, and testing. Plus workflow skills for security fixes, security audits, accessibility, Chrome debugging, wiki generation, and Jira automation.
+**Skills:** Context skills for React, WordPress, and testing. WordPress workflow skills for block development, Interactivity API, FSE/block themes, WP-CLI ops, and Playground. Plus productivity skills for security fixes, audits, accessibility, Chrome debugging, git automation, wiki generation, and Jira.
 
 [View Full Documentation](developers/README.md)
 
@@ -136,11 +140,11 @@ developers-toolkit/
 │
 ├── developers/                    # Single consolidated plugin
 │   ├── .claude-plugin/plugin.json     # Plugin manifest
-│   ├── agents/                        # 23 agents
-│   ├── commands/                      # 34 commands
-│   ├── rules/                         # 10 coding standards
-│   ├── hooks/hooks.json               # 5 hooks
-│   ├── skills/                        # 14 skills
+│   ├── agents/                        # 10 super-agents
+│   ├── commands/                      # 39 commands
+│   ├── rules/                         # 13 coding standards
+│   ├── hooks/hooks.json               # 7 hooks
+│   ├── skills/                        # 21 pro-skills
 │   ├── templates/                     # CLAUDE.md, hooks, CI/CD, scripts
 │   └── README.md
 │

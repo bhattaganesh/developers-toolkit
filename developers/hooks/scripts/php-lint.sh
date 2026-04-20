@@ -10,14 +10,22 @@ if [ -z "$FILE_PATH" ] || [[ ! "$FILE_PATH" =~ \.php$ ]]; then
     exit 0
 fi
 
-# Step 1: PHP syntax check
-if ! php -l "$FILE_PATH" 2>&1; then
-    echo "PHP syntax check failed for $FILE_PATH"
+# Step 1: PHP syntax check — only output on failure
+SYNTAX_OUTPUT=$(php -l "$FILE_PATH" 2>&1)
+SYNTAX_EXIT=$?
+if [ $SYNTAX_EXIT -ne 0 ]; then
+    echo "⚠ PHP syntax error: $FILE_PATH"
+    echo "$SYNTAX_OUTPUT"
     exit 0
 fi
 
-# Step 2: PHPStan analysis (only if installed in the project)
+# Step 2: PHPStan analysis (only if installed in the project) — only output on failure
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
 if [ -f "$PROJECT_DIR/vendor/bin/phpstan" ]; then
-    "$PROJECT_DIR/vendor/bin/phpstan" analyse --no-progress --no-ansi "$FILE_PATH" 2>&1 || true
+    PHPSTAN_OUTPUT=$("$PROJECT_DIR/vendor/bin/phpstan" analyse --no-progress --no-ansi "$FILE_PATH" 2>&1)
+    PHPSTAN_EXIT=$?
+    if [ $PHPSTAN_EXIT -ne 0 ]; then
+        echo "⚠ PHPStan: $FILE_PATH"
+        echo "$PHPSTAN_OUTPUT" | head -20
+    fi
 fi

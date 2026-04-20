@@ -1,6 +1,9 @@
 ---
 name: react-context
-description: "Auto-activates when working on React/NextJS files. Use this skill when editing .jsx, .tsx files or files in components/, pages/, hooks/ directories. Provides component architecture, hooks rules, and Tailwind conventions."
+description: >
+  This skill should be used when the user is editing React or NextJS files (.jsx, .tsx),
+  or files in components/, pages/, or hooks/ directories. Provides component architecture
+  guidance, React hooks rules, state management patterns, and Tailwind CSS conventions.
 version: 1.0.0
 ---
 

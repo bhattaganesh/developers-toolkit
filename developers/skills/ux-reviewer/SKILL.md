@@ -1,6 +1,10 @@
 ---
 name: ux-reviewer
-description: Use this skill when the user asks to "audit UX", "review user experience", "check usability", "review UI/UX", "audit copy", "review strings", "improve microcopy", "check UI text", "test user flow", "review navigation", or mentions user experience, usability testing, copy quality, or interaction design for web applications, WordPress plugins, or themes.
+description: >
+  This skill should be used when the user asks to "audit UX", "review user experience",
+  "check usability", "review UI/UX", "audit copy", "improve microcopy", "check UI text",
+  "test user flow", "review navigation", or mentions user experience, usability testing,
+  copy quality, or interaction design for web applications, WordPress plugins, or themes.
 version: 4.0.0
 tools: Read, Glob, Grep, Write, Edit, Bash, mcp__chrome-devtools__*
 context: fork
@@ -801,4 +805,4 @@ Before marking complete:
 
 **Version:** 4.0.0
 **Last Updated:** 2026-02-12
-**Merged from:** strings-review v3.0.0 + ux-reviewer v1.0.0
+**Merged from:** strings-review v2.0.0 + ux-reviewer v1.0.0

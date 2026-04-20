@@ -1,6 +1,11 @@
 ---
 name: wp-org-submission
-description: "Use this skill when the user asks to 'check if plugin is ready for WordPress.org', 'prepare plugin for submission', 'WordPress plugin submission checklist', 'submit plugin to WordPress repository', 'pre-submission check', 'plugin directory requirements', 'WordPress.org plugin review checklist', 'check plugin before uploading to wordpress org', or wants to audit a plugin before publishing it to the WordPress plugin repository."
+description: >
+  This skill should be used when the user asks to "check if plugin is ready for WordPress.org",
+  "prepare plugin for submission", "WordPress plugin submission checklist", "submit plugin to
+  WordPress repository", "pre-submission check", "plugin directory requirements",
+  "WordPress.org plugin review checklist", or wants to audit a plugin before publishing to
+  the WordPress plugin directory.
 version: 1.0.0
 tools: Read, Glob, Grep, Write, Bash
 ---

@@ -1,6 +1,10 @@
 ---
-name: rules
-description: "Use this skill when the user asks to 'apply org standards', 'check coding standards', 'enforce team rules', 'review against standards', or wants to understand what organizational coding standards apply to their project. Provides WordPress, React, and security standards enforcement."
+name: coding-standards
+description: >
+  This skill should be used when the user asks to "apply org standards", "check coding standards",
+  "enforce team rules", "review against standards", "what standards apply here", or wants to
+  understand what organizational coding standards apply to their project.
+  Provides WordPress, React, and security standards enforcement.
 version: 1.0.0
 ---
 

@@ -20,7 +20,7 @@ This is a **Claude Code plugin marketplace** and **skills repository** containin
 | Add new hook | Edit `hooks/hooks.json` |
 | Validate JSON | `cat file.json \| jq .` |
 | Run code review | `/developers:code-review` |
-| Scaffold WP feature | `/developers:new-wp-feature` |
+| Scaffold WP feature | `/developers:wp-new-feature` |
 | Check git status | `git status` |
 | Commit format | `feat:`, `fix:`, `docs:`, `chore:`, `refactor:` |
 
@@ -312,15 +312,15 @@ All commands require the `developers:` prefix:
 
 ### Code Quality & Review
 - `/developers:code-review` — Multi-agent code review (auto-detects stack, runs reviewers in parallel)
-- `/developers:security-check` — Security audit using security-auditor agent
+- `/developers:security-scan` — Security audit using security-auditor agent
 - `/developers:test-gaps` — Find missing test coverage using test-critic agent
 - `/developers:pre-pr` — Pre-PR checklist (debug artifacts, auth, migrations, tests, PR description)
 
 ### Code Generation & Scaffolding
 - `/developers:new-component` — Create React/NextJS component (responsive, accessible)
-- `/developers:new-wp-feature` — Scaffold new WordPress plugin feature
+- `/developers:wp-new-feature` — Scaffold new WordPress plugin feature
 - `/developers:write-tests` — Generate tests for controllers/components/services
-- `/developers:scaffold-project` — Initialize project with CLAUDE.md and .claude/ settings
+- `/developers:claude-code-setup` — Initialize project with CLAUDE.md and .claude/ settings
 
 ### Development Workflows
 - `/developers:debug` — Systematic debugging with structured root cause analysis
@@ -596,8 +596,8 @@ git commit -m "docs: update [what was changed]"
 
 **12. Command Invocation Format**
 - Commands use **plugin prefix**: `/developers:command-name`
-- **Wrong:** `/code-review` or `/scaffold-project`
-- **Right:** `/developers:code-review` or `/developers:scaffold-project`
+- **Wrong:** `/code-review` or `/claude-code-setup`
+- **Right:** `/developers:code-review` or `/developers:claude-code-setup`
 - Slash commands are listed with `/plugin list`
 
 ### Git Workflow Gotchas

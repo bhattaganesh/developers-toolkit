@@ -1,13 +1,11 @@
 ---
 name: wiki-docs
 description: >
-  Generates comprehensive documentation for projects — either GitHub Wiki pages (external-facing)
-  or Internal Docs files (developer onboarding, AI agent understanding, kept inside the repo).
-  Triggers on "generate wiki docs", "create wiki documentation", "build github wiki", "wiki pages",
-  "create project wiki", "document in wiki", "create internal docs", "generate dev docs",
-  "document the codebase", "onboarding documentation", or "architecture docs".
-  Produces dynamic pages covering full SDLC — architecture, APIs, testing, deployment —
-  tailored to detected tech stack (WordPress, React, NextJS, WordPress).
+  This skill should be used when the user asks to "generate wiki docs", "create wiki documentation",
+  "build github wiki", "create project wiki", "document in wiki", "create internal docs",
+  "generate dev docs", "document the codebase", "create onboarding documentation",
+  or "generate architecture docs". Produces GitHub Wiki pages or internal repo docs covering
+  full SDLC — architecture, APIs, testing, deployment — tailored to detected tech stack.
 version: 2.0.0
 tools: Read, Glob, Grep, Write, Bash
 context: fork

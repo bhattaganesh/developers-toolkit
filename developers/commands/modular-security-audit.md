@@ -52,5 +52,5 @@ Slow, thorough, high-confidence audits that minimize false positives. Every find
 ## Dependencies
 
 This command activates the **modular-security-audit** skill bundled with the developers plugin.
-For a quick security check (not comprehensive audit), use `/developers:security-check` instead.
+For a quick security check (not comprehensive audit), use `/developers:security-scan` instead.
 For implementing a fix after the audit, use `/developers:security-fix`.

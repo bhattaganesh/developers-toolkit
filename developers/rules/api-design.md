@@ -5,6 +5,12 @@ globs:
   - "app/Http/Controllers/Api/**/*.php"
   - "app/Http/Resources/**/*.php"
   - "app/Http/Requests/**/*.php"
+  - "includes/**/*rest*.php"
+  - "includes/**/*api*.php"
+  - "**/rest-api/**/*.php"
+  - "**/endpoints/**/*.php"
+  - "src/**/*api*.{js,ts}"
+  - "src/**/*endpoint*.{js,ts}"
 ---
 
 # API Design Rules

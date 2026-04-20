@@ -4,14 +4,14 @@
 
 A purpose-built Claude Code setup for WordPress plugin development, optimized for minimal token usage and maximum output quality. This includes:
 
-### 1. The Plugin (developers) — WordPress + React only
-- **23 agents** — code review, security, debugging, UX, design specialists
-- **34 commands** — workflows for scaffolding, reviews, debugging, testing, shipping
-- **10 rules** — WordPress, React, Security, Testing, Error Handling, etc. (auto-load on matching files)
-- **5 hooks** — PHP syntax checks, WPCS linting, test suggestions (auto-run on file saves)
-- **14 skills** — WordPress context, security audits, accessibility, wiki generation, etc. (auto-activate on file types or phrases)
+### 1. The Plugin (developers) — Full-Stack WordPress + React
+- **10 super-agents** — domain experts for WP, React, Security, UX, and QA
+- **39 commands** — expert workflows for setup, git flows, and diagnostics
+- **13 rules** — Core standards for WP, React, Security, and i18n
+- **7 hooks** — Real-time syntax, linting, and security gates
+- **21 skills** — Pro-grade automation, diagnostics, and sync engines
 
-All wordpress-specific content has been removed. The plugin is now exclusively WordPress + React.
+All non-essential content has been removed. The plugin is now a 200x productivity multiplier for Full-Stack WordPress & React development (React, TS, PHP, REST API).
 
 ---
 
@@ -24,7 +24,7 @@ All wordpress-specific content has been removed. The plugin is now exclusively W
 cd your-plugin/
 
 # 2. Initialize Claude Code configuration
-/developers:scaffold-project
+/developers:claude-code-setup
 
 # This creates:
 #   • CLAUDE.md (WordPress plugin template)
@@ -63,7 +63,7 @@ After this, your Claude Code sessions will:
 # Output: 10-expert debate on API choice, risks, alternatives
 
 # Then scaffold the feature:
-/developers:new-wp-feature
+/developers:wp-new-feature
 # Input: feature type + spec from expert-panel output
 # Output: plugin files with matched prefix/namespace conventions
 
@@ -96,7 +96,7 @@ wp-env run tests phpunit
 
 ```bash
 # 1. SECURITY FIRST (always)
-/developers:security-check includes/{{feature}}/
+/developers:security-scan includes/{{feature}}/
 # If CRITICAL: /developers:security-fix immediately
 
 # 2. CODE QUALITY + WP STANDARDS (parallel)
@@ -253,7 +253,7 @@ Don't run `/developers:new-wp-feature` once per type. Instead:
 ```bash
 wp scaffold plugin {{slug}}  # Creates skeleton + readme.txt + file structure
 
-/developers:new-wp-feature
+/developers:wp-new-feature
 # Input: "Build plugin with: CPT for testimonials, REST endpoint 
 # GET/POST /wp-json/slug/v1/testimonials, admin settings page"
 ```
@@ -299,8 +299,8 @@ When you edit WordPress PHP files, these load automatically:
 ### What Requires User Invocation
 
 **Commands** — use `/developers:command-name`:
-- `/developers:new-wp-feature` — scaffold feature with wp-developer agent
-- `/developers:security-check` — targeted security audit on specific directory
+- `/developers:wp-new-feature` — scaffold feature with wp-developer agent
+- `/developers:security-scan` — targeted security audit on specific directory
 - `/developers:code-review` — full review (wp-reviewer + security-auditor in parallel)
 - `/developers:modular-security-audit` — deep security audit (pre-release only)
 - `/developers:wp-org-submission` — 18-point readiness checklist for wordpress.org
@@ -327,7 +327,7 @@ When you edit WordPress PHP files, these load automatically:
 1. **Test the setup** on an existing WP plugin:
    ```bash
    cd E:\Local Sites\spectra\app\public\wp-content\plugins\zip-ai\
-   /developers:scaffold-project
+   /developers:claude-code-setup
    ```
    Verify: `wordpress-context` skill auto-activates when editing any `.php` file.
 

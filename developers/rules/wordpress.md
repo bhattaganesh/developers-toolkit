@@ -21,7 +21,8 @@ globs:
 ## Plugin Standards
 - Every PHP file starts with `defined('ABSPATH') || exit;`
 - Plugin prefix on ALL functions, classes, hooks, constants, options
-- Consistent text domain for ALL translatable strings
+- Consistent text domain for ALL translatable strings (See `./i18n.md` for standards)
+- Every translatable string MUST also be escaped (e.g., `esc_html__()`)
 - Proper plugin headers in main file
 - Provide `uninstall.php` or `register_uninstall_hook` for cleanup
 

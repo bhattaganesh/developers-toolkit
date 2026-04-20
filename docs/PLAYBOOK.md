@@ -1,6 +1,6 @@
 # Developers Plugin Playbook
 
-> Organized by plugin feature. Each feature includes what makes it special and realistic Before/After examples.
+> Organized by plugin feature. The toolkit uses a high-density **'Super-Agent' architecture** consisting of **10 specialized pro-agents** that consolidate 25+ domain expertise roles into token-optimized models.
 
 ## Install the Plugin
 
@@ -174,7 +174,7 @@ The plugin ships hook logic in its configuration, but you can also copy standalo
 mkdir -p .claude/hooks
 ```
 
-The hooks.json in the plugin defines 8 hooks that fire automatically:
+The hooks.json in the plugin defines 7 hooks that fire automatically:
 
 | Hook | Event | What It Does |
 |------|-------|--------------|
@@ -185,7 +185,6 @@ The hooks.json in the plugin defines 8 hooks that fire automatically:
 | Suggest tests | PostToolUse (Write/Edit) | Suggests related test files after edits |
 | Block dangerous | PreToolUse (Bash) | Blocks `rm -rf`, `DROP TABLE` |
 | Block .env commit | PreToolUse (Bash) | Blocks `git add .env` |
-| Auto-run tests | Stop | Runs test suite after Claude finishes responding |
 
 These hooks work automatically once the plugin is installed. No manual setup needed — they read from the plugin's `hooks.json`.
 
@@ -361,7 +360,7 @@ Run through this before your first session with the developers plugin:
 
 ---
 
-# COMMANDS (17 Slash Commands)
+# COMMANDS (36 Slash Commands)
 
 Slash commands are one-step workflows that orchestrate complex multi-step tasks. They combine agents, tools, and rules into repeatable processes any developer can run consistently.
 
@@ -379,11 +378,9 @@ Slash commands are one-step workflows that orchestrate complex multi-step tasks.
 
 **After:** Running `/developers:code-review` spawns `wp-reviewer` + `security-auditor` in parallel. The `wp-reviewer` flags the missing role whitelist and suggests using `wp_roles()->get_names()` for validation. The `security-auditor` catches the SQL injection vector and rates it HIGH. Both findings come back in one report with exact file:line references and fix suggestions.
 
-
-
 ---
 
-## `/developers:security-check`
+## `/developers:security-scan`
 
 **Feature:** Focused security audit using the `security-auditor` agent on your changed files. Checks OWASP Top 10 patterns specific to your stack.
 
@@ -395,7 +392,7 @@ Slash commands are one-step workflows that orchestrate complex multi-step tasks.
 
 **Before:** Developer asks Claude to "check if this is secure." Claude gives surface-level feedback like "looks fine" or "you should validate input" without specific findings.
 
-**After:** `/developers:security-check` runs the `security-auditor` on the diff. It finds that the new auth method falls back to `wp_get_current_user()` without verifying the request origin, potentially allowing cross-site authenticated requests. Rates it HIGH with a specific fix: add nonce verification for session-based auth paths.
+**After:** `/developers:security-scan` runs the `security-auditor` on the diff. It finds that the new auth method falls back to `wp_get_current_user()` without verifying the request origin, potentially allowing cross-site authenticated requests. Rates it HIGH with a specific fix: add nonce verification for session-based auth paths.
 
 ---
 
@@ -425,7 +422,7 @@ Slash commands are one-step workflows that orchestrate complex multi-step tasks.
 
 ---
 
-## `/developers:new-wp-feature`
+## `/developers:wp-new-feature`
 
 **Feature:** Scaffolds a complete WordPress plugin feature in one pass -- class structure, hooks registration, and REST API handlers.
 
@@ -437,7 +434,7 @@ Slash commands are one-step workflows that orchestrate complex multi-step tasks.
 
 **Before:** Developer asks Claude to "create a feature." Claude generates generic code. Developer spends 30 minutes adapting it to match the project's standards and security requirements.
 
-**After:** `/developers:new-wp-feature` with feature name. The `wp-developer` agent reads existing classes to match the style, then generates: CPT registration, REST handler with proper permissions, and a feature test covering success/403/404.
+**After:** `/developers:wp-new-feature` with feature name. The `wp-developer` agent reads existing classes to match the style, then generates: CPT registration, REST handler with proper permissions, and a feature test covering success/403/404.
 
 ---
 
@@ -464,9 +461,6 @@ Slash commands are one-step workflows that orchestrate complex multi-step tasks.
 **What's special:** Traces across layers -- from route to middleware to controller to service to model to events. Shows the complete picture, not just one file. Lists every file involved with its role.
 
 **After:** `/developers:explain POST /wp-json/v1/agent/chat/stream` traces the complete path: REST Route → Auth check → Capability check → Controller handler → Logic service → DB queries. Shows every file, every decision point, every fallback. Full picture in 30 seconds.
-**After:** `/developers:explain POST /api/v1/agent/chat/stream` traces the complete path: API Route → Auth check → Capability check → Controller handler → Logic service → DB queries. Shows every file, every decision point, every fallback. Full picture in 30 seconds.
-
-**After:** `/developers:explain "tool execution from iframe to ability"` traces: iframe PostMessage → `bridge.js` → `AgentHandler` → `ToolExecutor` → `API::handle_tool_call()` → `Tool_Registry` → `Abstract_Ability::check_permission()` → `Abstract_Ability::execute()`. Shows the complete chain.
 
 ---
 
@@ -516,17 +510,15 @@ Slash commands are one-step workflows that orchestrate complex multi-step tasks.
 
 **After:** `/developers:profile` traces the bottleneck to `Abilities_Service_Provider::boot()`, identifies that `configure()` runs on every ability regardless of use, provides specific measurements to take, and recommends three optimizations in priority order with expected improvement percentages.
 
-**After:** `/developers:deploy-check` scans constants, env vars, dependencies, test suite, and build output. Catches that `WP_SITEURL` is misconfigured. Deployment blocked until fixed.
-
 ---
 
-# AGENTS (23 Specialized Agents)
+# AGENTS (25 Specialized Agents)
 
 Agents are persistent AI personas with deep domain expertise. Unlike commands (which are workflows), agents are specialists you invoke for specific tasks. They maintain their expertise boundaries -- review agents never modify files, developer agents write code following project patterns.
 
 ---
 
-## Review Agents (11 specialized agents)
+## Review Agents (14 specialized agents)
 
 **What's special:** Review agents are **read-only** -- they analyze code but never modify it. Each agent has deep expertise in one domain. You can run multiple review agents in parallel on the same code for comprehensive coverage.
 
@@ -588,7 +580,7 @@ Database schema design, query optimization, indexing strategy, and planning.
 
 ---
 
-# SKILLS (14 Deep-Workflow Skills)
+# SKILLS (21 Deep-Workflow Skills)
 
 Skills are comprehensive, multi-phase workflows with their own reference materials, templates, and examples. They activate automatically based on what you ask for. Skills are more thorough than commands -- they include decision trees, quality gates, error recovery, and structured deliverables.
 
@@ -692,7 +684,7 @@ Skills are comprehensive, multi-phase workflows with their own reference materia
 
 ---
 
-# HOOKS (5 Automatic Protections)
+# HOOKS (7 Automatic Protections)
 
 Hooks run automatically in response to events -- file edits, command execution, session start, session end. No developer action needed. They enforce quality and safety silently.
 
@@ -820,15 +812,17 @@ Four agents work simultaneously. Each follows the project's rules automatically 
 
 ---
 
+---
+
 # QUICK REFERENCE
 
 | Feature Type | Count | Runs |
 |-------------|-------|------|
-| Commands | 34 | When you type the slash command |
-| Agents | 24 (11 review + 13 developer) | When invoked by commands or directly |
-| Skills | 13 (3 context + 10 workflow) | Auto-activate or when triggered |
-| Hooks | 5 | Automatically on events |
-| Rules | 11 | Always active in every session |
+| Commands | 39 | When you type the slash command |
+| Agents | 10 | 'Super-Agent' consolidated architecture |
+| Skills | 21 | Auto-activate or when triggered |
+| Hooks | 7 | Automatically on events |
+| Rules | 13 | Always active in every session |
 
 ---
 

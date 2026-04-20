@@ -1,6 +1,10 @@
 ---
 name: chrome-debug
-description: Use when you need "debug browser", "take screenshot", "inspect page", "check console errors", "test responsive", "debug network", "verify visual changes", "test forms", "check performance", "mobile debug", or mentions Chrome DevTools, browser automation, UI verification, visual regression.
+description: >
+  This skill should be used when the user asks to "debug browser", "take a screenshot",
+  "inspect the page", "check console errors", "test responsive layout", "debug network requests",
+  "verify visual changes", "test forms", "check performance", "debug on mobile",
+  or mentions Chrome DevTools, browser automation, UI verification, or visual regression testing.
 version: 1.0.0
 tools: Read, Glob, Grep, Bash
 context: fork

@@ -1,6 +1,10 @@
 ---
 name: accessibility-audit
-description: Use this skill when the user asks to "audit accessibility", "check WCAG compliance", "review accessibility", "a11y audit", "check screen reader support", "audit keyboard navigation", or mentions accessibility testing for WordPress plugins, themes, or websites. Performs comprehensive WCAG 2.2 Level AA compliance audits with beginner-friendly explanations and minimal-change remediation plans.
+description: >
+  This skill should be used when the user asks to "audit accessibility", "check WCAG compliance",
+  "review accessibility", "a11y audit", "check screen reader support", "audit keyboard navigation",
+  or mentions accessibility testing for WordPress plugins, themes, or websites.
+  Performs comprehensive WCAG 2.2 Level AA audits with beginner-friendly remediation plans.
 version: 2.0.0
 tools: Read, Glob, Grep, Write, Bash, Task
 context: fork

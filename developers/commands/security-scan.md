@@ -2,7 +2,7 @@
 description: Run a security audit on the codebase using the security-auditor agent
 ---
 
-# Security Check
+# Security Scan
 
 Run a focused security audit on the codebase.
 

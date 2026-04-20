@@ -258,7 +258,7 @@ Display messages to all sessions when Claude Code starts:
 {
   "companyAnnouncements": [
     "Developers plugin installed - use /developers:code-review before PRs",
-    "Security reminder: Run /developers:security-check on user input handlers",
+    "Security reminder: Always run /developers:security-scan on code handling user input",
     "New standard: All API endpoints require feature tests"
   ]
 }

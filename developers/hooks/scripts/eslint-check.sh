@@ -10,11 +10,21 @@ if [ -z "$FILE_PATH" ] || [[ ! "$FILE_PATH" =~ \.(js|jsx|ts|tsx)$ ]]; then
     exit 0
 fi
 
-# Run ESLint with auto-fix (prefer project-local, fallback to npx)
+# Run ESLint with auto-fix — only output warnings/errors, suppress success noise
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
 
 if [ -f "$PROJECT_DIR/node_modules/.bin/eslint" ]; then
-    "$PROJECT_DIR/node_modules/.bin/eslint" --fix "$FILE_PATH" 2>&1 || true
+    ESLINT_OUTPUT=$("$PROJECT_DIR/node_modules/.bin/eslint" --fix "$FILE_PATH" 2>&1)
+    ESLINT_EXIT=$?
+    if [ $ESLINT_EXIT -ne 0 ]; then
+        echo "⚠ ESLint: $FILE_PATH"
+        echo "$ESLINT_OUTPUT" | head -30
+    fi
 elif command -v npx &>/dev/null; then
-    npx eslint --fix "$FILE_PATH" 2>&1 || true
+    ESLINT_OUTPUT=$(npx eslint --fix "$FILE_PATH" 2>&1)
+    ESLINT_EXIT=$?
+    if [ $ESLINT_EXIT -ne 0 ]; then
+        echo "⚠ ESLint: $FILE_PATH"
+        echo "$ESLINT_OUTPUT" | head -30
+    fi
 fi

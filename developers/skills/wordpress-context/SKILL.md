@@ -1,6 +1,10 @@
 ---
 name: wordpress-context
-description: "Auto-activates when working on WordPress plugin or theme files. Use this skill when editing files with WordPress functions like add_action, add_filter, or in wp-content/ directories. Provides WPCS reminders and security checklist."
+description: >
+  This skill should be used when the user is editing WordPress plugin or theme files,
+  working with files that contain add_action, add_filter, or wp_ function calls,
+  or editing files in wp-content/ directories. Provides WPCS reminders, security
+  checklist, and WP 6.9+ modern patterns guidance.
 version: 1.0.0
 ---
 
@@ -43,3 +47,12 @@ version: 1.0.0
 - Use `wp_localize_script()` or `wp_add_inline_script()` to pass PHP data to JavaScript
 - Check `is_wp_error()` on every function that can return `WP_Error`
 - Use transients (`get_transient()` / `set_transient()`) for caching expensive operations
+
+## WP 6.9+ Modern Patterns
+
+- **Blocks:** Use `apiVersion: 3` for all new blocks — required for iframe editor compatibility in WP 6.9+
+- **Interactivity API:** Use `data-wp-*` directives + `wp_interactivity_state()` for interactive blocks instead of jQuery. See `wp-interactivity-api` skill for details.
+- **Block themes:** Check for `theme.json` at project root — if present, use `wp-block-themes` skill for FSE-specific workflows
+- **On-demand CSS (WP 6.9):** Classic themes now load block styles on-demand by default — test that block styles load correctly when the block is on the page
+- **Capabilities (WP 6.9+):** `wp_register_ability()` provides granular, filterable permissions beyond direct role checks — use for new features where fine-grained permission control is needed
+- **viewScriptModule vs viewScript:** For Interactivity API blocks, use `"viewScriptModule"` in block.json (ES module), NOT `"viewScript"` (classic script)
